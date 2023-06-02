@@ -1,16 +1,5 @@
 # tinderdog
 
-A new Flutter project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Project_06-02_F-1685671140359](https://github.com/Anil-sahu/tinderdog/assets/68375571/bfc4e4db-6114-4e69-aaa5-d81c3b3e9069)
+![Project_06-02(1-1685673478172](https://github.com/Anil-sahu/tinderdog/assets/68375571/be1043f0-244f-44d9-8112-24aeea4e2116)

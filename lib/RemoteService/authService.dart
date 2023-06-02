@@ -7,6 +7,7 @@ import 'package:tinderdog/controller/userController.dart';
 import 'package:tinderdog/view/home/HomeScreen.dart';
 
 class AuthonticationService {
+<<<<<<< HEAD
 //----------------------------------toast-----------------------------//
   static toast(text) {
     Fluttertoast.showToast(
@@ -19,6 +20,24 @@ class AuthonticationService {
 
 //----------------------------adduser into firestore----------------------------------//
   static uploadUser(id, username) async {
+=======
+
+
+  
+  //---------------------------------------------------toast--------------------------------------//
+   static toast(text) {
+  Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      textColor: Colors.white,
+      fontSize: 16.0);
+}
+  
+  
+  //----------------------------add new user to firestore-----------------------------------//
+ static uploadUser(id, username) async {
+>>>>>>> 4101444460f1b62b1f80c422f2049602415ced84
     try {
       await FirebaseFirestore.instance
           .collection("user")
