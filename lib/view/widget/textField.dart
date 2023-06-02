@@ -21,7 +21,6 @@ class CustomTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextFormField(
-        
         controller: controller,
         obscureText:isObs??false,
         decoration: InputDecoration(

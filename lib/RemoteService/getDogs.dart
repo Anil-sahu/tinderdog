@@ -8,13 +8,12 @@ import 'package:http/http.dart' as http;
 
 class RemoteService {
   static var client = http.Client();
-
+//---------------------------fetch random dog------------------------------//
   static Future fetchDogs() async {
     try {
       var res = await client.get(Uri.parse("https://dog.ceo/api/breeds/image/random"));
       if (res.statusCode == 200) {
         var jsonString = res.body;
-      print(jsonDecode(jsonString));
       return jsonDecode(jsonString);
       } else {}
     } catch (e) {

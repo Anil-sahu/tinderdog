@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tinderdog/controller/userController.dart';
@@ -24,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Get.find<userController>().username.value != "" &&
             Get.find<userController>().username.isNotEmpty
         ? Get.offAll(() =>  MyHomePage())
-        : Get.offAll(() => LoginScreen());
+        : Get.offAll(() => const LoginScreen());
   }
 
   @override

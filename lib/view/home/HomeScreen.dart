@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swipe_cards/draggable_card.dart';
@@ -17,196 +16,235 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
-   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-   var image ;
-var colors=Colors.black;
-
-  List<SwipeItem> _swipeItems = <SwipeItem>[];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  var image;
+  var colors = Colors.black;
+  final List<SwipeItem> _swipeItems = <SwipeItem>[];
   MatchEngine? _matchEngine;
-
-  List<String> _names = [
-    "Red",
-    "Blue",
-    "Green",
-    "Yellow",
-    "Orange",
-    "Grey",
-    "Purple",
-    "Pink"
-  ];
-  List<Color> _colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange,
-    Colors.grey,
-    Colors.purple,
-    Colors.pink
-  ];
   var region;
-   late AnimationController _favoriteController;
-   
+
+  late AnimationController _favoriteController;
+
+  getSwiperItem() {
+    for (int i = 0; i < 10; i++) {
+      _swipeItems.add(SwipeItem(
+          content: Content(text: i.toString(), color: colors),
+          likeAction: () {
+            setState(() {
+              colors = Colors.blue;
+              Get.find<userController>()
+                  .saveRPoint(Get.find<userController>().rpoint.value + 1);
+            });
+          },
+          nopeAction: () {
+            setState(() {
+              Get.find<userController>()
+                  .saveLPoint(Get.find<userController>().lpoint.value + 1);
+              colors = Colors.red;
+            });
+          },
+          superlikeAction: () {
+            Get.find<userController>()
+                .saveDPoint(Get.find<userController>().dpoint.value + 1);
+
+            setState(() {
+              colors = Colors.black;
+            });
+          },
+          onSlideUpdate: (SlideRegion? region) async {
+            setState(() {
+              this.region = region;
+            });
+          }));
+    }
+  }
+
+  getImage() async {
+    var img = await RemoteService.fetchDogs();
+    setState(() {
+      image = img['message'];
+    });
+  }
 
   @override
   void initState() {
     Get.find<userController>().getUsername();
     getImage();
-      _favoriteController =
+    getSwiperItem();
+    _favoriteController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    for (int i = 0; i < _names.length; i++) {
-      _swipeItems.add(SwipeItem(
-          content: Content(text: _names[i], color: _colors[i]),
-          likeAction: () {
-           
-            setState(() {
-              colors=Colors.blue;
-            });
-          },
-          nopeAction: () {
-
-            setState(() {
-              colors=Colors.red;
-            });
-          },
-          superlikeAction: () {
-     
-
-            setState(() {
-              colors=Colors.black;
-            });
-          },
-          onSlideUpdate: (SlideRegion? region) async {
-            print("Region $region");
-
-            setState(() {
-this.region = region;
-            });
-          }));
-    }
-
     _matchEngine = MatchEngine(swipeItems: _swipeItems);
     super.initState();
   }
 
-getImage()async{
-  var img = await RemoteService.fetchDogs();
-  setState(() {
-    image = img['message'];
-  });
-}
-
-@override
+  @override
   void dispose() {
-     _favoriteController.dispose();
+    _favoriteController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Obx(()=> Text(Get.find<userController>().username.value)),
+          title: Obx(() =>
+              Text(Get.find<userController>().username.value.toUpperCase())),
           backgroundColor: colors,
-          actions: [CircleAvatar(radius: 20,backgroundColor: Colors.white,child: Obx(()=>Text(Get.find<userController>().point.value.toString(),style: TextStyle(color: colors,fontWeight: FontWeight.bold),)),)],
         ),
-        body:Center(
+        body: Center(
           child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-        
-                 Container(
-                height: MediaQuery.of(context).size.height-100,
-                child: SwipeCards(
-                  matchEngine: _matchEngine!,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      alignment: Alignment.center,
-                      color: colors,
-                      child:image!=null?Image.network(image,width: MediaQuery.of(context).size.width-50,):CircularProgressIndicator(),
-                    );
-                  },
-                  onStackFinished: () {
-                    _matchEngine = MatchEngine(swipeItems: _swipeItems);
-                    setState(() {
-                      
-                    });
-         
-                  },
-                  itemChanged: (SwipeItem item, int index) {
-                    Get.find<userController>().getUsername();
-                    Get.find<userController>().savePoint(Get.find<userController>().point.value+1);
-                   
-        setState(() {
-              getImage();
-                 if (_favoriteController.status ==
-                          AnimationStatus.dismissed) {
-                        _favoriteController.reset();
-                        _favoriteController.animateTo(0.6);
-                      } else {
-                        _favoriteController.reverse();
-                      }
-                                  if(region ==SlideRegion.inLikeRegion){
-colors=Colors.red;
-                }
-                if(region ==SlideRegion.inNopeRegion){
-colors =Colors.blue;
-                }
-                if(region ==SlideRegion.inSuperLikeRegion){
-colors=Colors.black;
-                }
-        });
-                  },
-                  leftSwipeAllowed: true,
-                  rightSwipeAllowed: true,
-                  upSwipeAllowed: true,
-                  fillSpace: true,
-                  likeTag:Icon(Icons.favorite,color: Colors.yellow,),
-                  nopeTag: Container(
-                    margin: const EdgeInsets.all(15.0),
-                    padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.red)
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 100,
+
+                    //----------------------------SWIPE CARDD------------------------------------//
+                    child: SwipeCards(
+                      matchEngine: _matchEngine!,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          alignment: Alignment.center,
+                          color: colors,
+                          child: image != null
+                              ? Image.network(
+                                  image,
+                                  width: MediaQuery.of(context).size.width - 50,
+                                )
+                              : const CircularProgressIndicator(),
+                        );
+                      },
+                      onStackFinished: () {
+                        _matchEngine = MatchEngine(swipeItems: _swipeItems);
+                        setState(() {});
+                      },
+                      itemChanged: (SwipeItem item, int index) {
+                        print(item.decision);
+                        Get.find<userController>().getUsername();
+
+                        getImage();
+                        if (_favoriteController.status ==
+                            AnimationStatus.dismissed) {
+                          _favoriteController.reset();
+                          _favoriteController.animateTo(0.6);
+                        } else {
+                          _favoriteController.reverse();
+                        }
+                        if (region == SlideRegion.inLikeRegion) {
+                          colors = Colors.red;
+                          Get.find<userController>().saveLPoint(
+                              Get.find<userController>().lpoint.value + 1);
+                          print(region);
+                        }
+                        if (region == SlideRegion.inNopeRegion) {
+                          colors = Colors.blue;
+                          Get.find<userController>().saveRPoint(
+                              Get.find<userController>().rpoint.value + 1);
+                        }
+                        if (region == SlideRegion.inSuperLikeRegion) {
+                          colors = Colors.black;
+                          Get.find<userController>().saveDPoint(
+                              Get.find<userController>().dpoint.value + 1);
+                        }
+                      },
+                      leftSwipeAllowed: true,
+                      rightSwipeAllowed: true,
+                      upSwipeAllowed: true,
+                      fillSpace: true,
                     ),
-                    child: Text('Nope'),
                   ),
-                  superLikeTag: Container(
-                    margin: const EdgeInsets.all(15.0),
-                    padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orange)
-                    ),
-                    child: Text('Super Like'),
-                  ),
-                ),
-              ),
-         
-              
-         
-               
-               
-        
-        
                 ],
               ),
-             
-           
 
-                        Container(
-                          child: Container(width: 40,height: 40,decoration: BoxDecoration(color: Colors.white,shape: BoxShape.circle),child: Icon(Icons.favorite,color: colors,size: 40,)),
-                          height:100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            boxShadow:[BoxShadow(offset: Offset(2,3),color: Colors.white,blurRadius: 5)],
-                            color:Colors.black,borderRadius: BorderRadius.vertical(top: Radius.circular(MediaQuery.of(context).size.width/2)),),),
+              //-----------------------------BOTTOM wIDGET---------------------------//
+              Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(2, 3),
+                          color: Colors.white,
+                          blurRadius: 5)
+                    ],
+                    color: Colors.black,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        color: colors.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 40,
+                            ),
+                            Obx(() => Text(
+                                  Get.find<userController>()
+                                      .lpoint
+                                      .value
+                                      .toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              color: Colors.black,
+                              size: 40,
+                            ),
+                            Obx(() => Text(
+                                  Get.find<userController>()
+                                      .dpoint
+                                      .value
+                                      .toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.favorite,
+                              color: Colors.blue,
+                              size: 40,
+                            ),
+                            Obx(() => Text(
+                                  Get.find<userController>()
+                                      .rpoint
+                                      .value
+                                      .toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
             ],
-            alignment: Alignment.bottomCenter,
           ),
         ));
   }

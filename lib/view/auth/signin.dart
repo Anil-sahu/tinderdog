@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tinderdog/view/auth/signup.dart';
 import 'package:tinderdog/view/widget/textField.dart';
-
 import '../../RemoteService/authService.dart';
 import '../widget/button.dart';
 
@@ -149,8 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       height: 40,
                                     ),
                                        TextButton(onPressed: (){
-                                          Get.to(()=>RegisterPage());
-                                        }, child: Text("If You have an account? signIn",style: TextStyle(color: Colors.blueGrey),))
+                                          Get.to(()=>const RegisterPage());
+                                        }, child: const Text("If You have an account? signIn",style: TextStyle(color: Colors.blueGrey),))
                                   ],
                                 ),
                               ),

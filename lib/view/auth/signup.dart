@@ -1,13 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tinderdog/RemoteService/authService.dart';
 import 'package:tinderdog/view/auth/signin.dart';
 import 'package:tinderdog/view/widget/button.dart';
 import 'package:tinderdog/view/widget/textField.dart';
-
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,11 +15,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
- String emailRegX =
+  String emailRegX =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
   bool loading = false;
@@ -32,7 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
   stopLoading() => setLoading(false);
 
   setError(String error) => setState(() => errorString = error);
-
 
   bool validateUName() {
     if (_userNameController.text.length < 3) {
@@ -59,12 +55,8 @@ class _RegisterPageState extends State<RegisterPage> {
     return true;
   }
 
-
-
   bool validateData() =>
-      validatePassword() &&
-      validateEmail() &&
-      validateUName();
+      validatePassword() && validateEmail() && validateUName();
   @override
   void initState() {
     super.initState();
@@ -87,7 +79,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                    
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -100,12 +91,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 const SizedBox(
                                   height: 30,
                                 ),
-                               
                                 Image.asset(
                                   "images/logo.png",
-                                  height: MediaQuery.of(context).size.width / 2,
+                                  height: MediaQuery.of(context).size.width / 2.5,
                                 ),
-                             
                               ],
                             ),
                           ),
@@ -137,7 +126,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                         const SizedBox(
                                           height: 15,
                                         ),
-                                   
                                         CustomTextField(
                                           controller: _emailController,
                                           hintText: 'Email',
@@ -173,10 +161,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                             onTap: () {
                                               if (!validateData()) return;
                                               setState(() => loading = true);
-                                             
 
                                               AuthonticationService
-                                                      .registerUser(_userNameController.text,_emailController.text.trim(),_passwordController.text.trim())
+                                                      .registerUser(
+                                                          _userNameController
+                                                              .text,
+                                                          _emailController.text
+                                                              .trim(),
+                                                          _passwordController
+                                                              .text
+                                                              .trim())
                                                   .whenComplete(() {
                                                 setState(() => loading = false);
                                               });
@@ -186,9 +180,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        TextButton(onPressed: (){
-                                          Get.to(()=>LoginScreen());
-                                        }, child: Text("If You have an account? signIn",style: TextStyle(color: Colors.blueGrey),))
+                                        TextButton(
+                                            onPressed: () {
+                                              Get.to(() => const LoginScreen());
+                                            },
+                                            child: const Text(
+                                              "If You have an account? signUp",
+                                              style: TextStyle(
+                                                  color: Colors.blueGrey),
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -207,11 +207,10 @@ class _RegisterPageState extends State<RegisterPage> {
           if (loading)
             Container(
               color: Colors.grey.shade50.withOpacity(0.4),
-              child: Center(child: const CircularProgressIndicator()),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
     );
   }
-
 }

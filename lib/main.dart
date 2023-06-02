@@ -1,14 +1,8 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_icons/flutter_animated_icons.dart';
-import 'package:flutter_animated_icons/icons8.dart';
 import 'package:get/get.dart';
-
-import 'package:tinderdog/controller/userController.dart';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tinderdog/view/auth/signin.dart';
+import 'package:tinderdog/controller/userController.dart';
 import 'package:tinderdog/view/splashScreen.dart';
 
 void main()async {
@@ -33,13 +27,9 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return const GetMaterialApp(
       title: 'Tindere dog',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
