@@ -7,11 +7,10 @@ import 'package:tinderdog/controller/userController.dart';
 import 'package:tinderdog/view/home/HomeScreen.dart';
 
 class AuthonticationService {
-  Future wait(int seconds) async {
-    return Future.delayed(
-        Duration(seconds: seconds), () => print('Waited $seconds seconds'));
-  }
 
+
+  
+  //---------------------------------------------------toast--------------------------------------//
    static toast(text) {
   Fluttertoast.showToast(
       msg: text,
@@ -20,6 +19,9 @@ class AuthonticationService {
       textColor: Colors.white,
       fontSize: 16.0);
 }
+  
+  
+  //----------------------------add new user to firestore-----------------------------------//
  static uploadUser(id, username) async {
     try {
       await FirebaseFirestore.instance
